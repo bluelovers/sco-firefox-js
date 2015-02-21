@@ -11,8 +11,12 @@
 /* Array of bytes to base64 string decoding */
 
 this.EXPORTED_SYMBOLS = ['btoa', 'atob'];
-var exports = {btoa, atob};
+this.exports = {btoa, atob};
 
+/**
+ * ✓ à la mode
+ * I \u2661 Unicode!
+ **/
 function btoa(stringToEncode)
 {
 	var aMyUTF8Input = strToUTF8Arr(stringToEncode);
