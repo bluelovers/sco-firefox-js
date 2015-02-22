@@ -1,8 +1,9 @@
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
+let {
+	classes: Cc,
+	interfaces: Ci,
+	results: Cr,
+	utils: Cu,
+} = Components;
 
 this.EXPORTED_SYMBOLS = ['ApiObserver'];
 this.exports = {ApiObserver};
@@ -127,4 +128,4 @@ Object.assign(ApiObserver.prototype,
 
 ApiObserver.prototype.__construct.prototype = ApiObserver.prototype;
 
-return this.exports;
+//return this.exports;
