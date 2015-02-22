@@ -1,13 +1,16 @@
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
+let {
+	classes: Cc,
+	interfaces: Ci,
+	results: Cr,
+	utils: Cu,
+} = Components;
 
 const __global__ = this;
 this.exports = this.exports || {};
 
-this[this.EXPORTED_SYMBOLS = ['Utils']] = exports.Utils = {
+//Cu.import('Loader.js');
+
+this[this.EXPORTED_SYMBOLS = ['Utils']] = this.exports.Utils = {
 
 	inArray: function (needle, haystack, argstrict)
 	{
@@ -32,6 +35,16 @@ this[this.EXPORTED_SYMBOLS = ['Utils']] = exports.Utils = {
 	isArray: function (haystack)
 	{
 		return Array.isArray(haystack);
+	},
+
+	isPlainObject: function(obj)
+	{
+		if (!obj || typeof obj !== 'object' || obj.nodeType || obj == window || obj == Utils.getGlobalForObject())
+		{
+			return false;
+		}
+
+		return true;
 	},
 
 	getGlobalForObject: function (context)
@@ -70,3 +83,5 @@ this[this.EXPORTED_SYMBOLS = ['Utils']] = exports.Utils = {
 	},
 
 };
+
+//return this.exports;
