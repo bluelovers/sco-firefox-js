@@ -10,6 +10,7 @@ this.exports = {ApiObserver};
 
 Cu.import('resource://gre/modules/Services.jsm');
 
+// https://adblockplus.org/blog/modularization-in-a-restartless-extension
 function ApiObserver()
 {
 	return new ApiObserver.prototype.__construct();
