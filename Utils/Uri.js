@@ -19,7 +19,7 @@ function UriUtils(uri)
 	return new UriUtils.prototype.__construct(uri);
 };
 
-Object.assign(UriUtils.prototype,
+UriUtils.prototype = Object.assign(
 {
 
 	__cache__: null,
@@ -27,6 +27,8 @@ Object.assign(UriUtils.prototype,
 
 	__construct: function(uri)
 	{
+		var _this = this;
+
 		this.__cache__ = {};
 		this.source = this.createInstance();
 
@@ -34,15 +36,52 @@ Object.assign(UriUtils.prototype,
 		{
 			this.__cache__.source = uri;
 
-			this.source.spec = uri;
+			if (/^[a-z-]+:/.exec(uri))
+			{
+				this.source.spec = uri;
+			}
+			else
+			{
+				this.source.fileName = uri;
+			}
+		}
+
+		for (let name in this.source)
+		{
+			if (Object.prototype.hasOwnProperty.call(UriUtils.prototype, name))
+			{
+				continue;
+			}
+
+			(function(name)
+			{
+
+				if (typeof newUri[name] === 'function')
+				{
+					this.__defineGetter__(name, function()
+					{
+						return this.source[name].bind(this.source);
+					});
+				}
+				else
+				{
+
+					this.__defineGetter__(name, function()
+					{
+						return this.source[name];
+					});
+
+					this.__defineSetter__(name, function(val)
+					{
+						this.source[name] = val;
+					});
+
+				}
+
+			})(name);
 		}
 
 		return this;
-	},
-
-	createInstance: function()
-	{
-		return Components.classes['@mozilla.org/network/standard-url;1'].createInstance(Components.interfaces.nsIURL);
 	},
 
 	toString: function()
@@ -87,10 +126,67 @@ Object.assign(UriUtils.prototype,
 		return this.__cache__.queryKey = this.parseParam(this.source.query);
 	},
 
+	setDirectory: function(val)
+	{
+		return this.source.path = val + this.source.fileName + (this.source.query ? '?' + this.source.query: '') + (this.source.ref ? '#' + this.source.ref: '');
+	},
+
+	get fragment()
+	{
+		return this.source.ref;
+	},
+
+	set fragment(val)
+	{
+		this.source.ref = val;
+	},
+
+	get directory()
+	{
+		return this.source.directory;
+	},
+
+	set directory(val)
+	{
+		this.setDirectory(val);
+	},
+
+	get spec()
+	{
+		return this.source.spec;
+	},
+
+	set spec(val)
+	{
+		this.__cache__.source = val;
+
+		this.source.spec = val;
+	},
+
 }, Object.assign(UriUtils,
 {
 	get QUERYKEY_SKIP() QUERYKEY_SKIP,
 	get QUERYKEY_UNDEF() QUERYKEY_UNDEF,
+
+	getInstance: function(uri)
+	{
+		return UriUtils.validInstance(uri) ? uri : UriUtils(uri);
+	},
+
+	createInstance: function()
+	{
+		return Cc['@mozilla.org/network/standard-url;1'].createInstance(Ci.nsIURL);
+	},
+
+	validInstance: function(uri)
+	{
+		if (uri instanceof UriUtils || uri instanceof Ci.nsIURL || uri instanceof UriUtils.prototype.__construct)
+		{
+			return true;
+		}
+
+		return false;
+	},
 
 	buildParam: function(val, prefix, d)
 	{
@@ -204,7 +300,7 @@ Object.assign(UriUtils.prototype,
 	*/
 	for (let name in newUri)
 	{
-		if (UriUtils.prototype.hasOwnProperty(name))
+		if (Object.prototype.hasOwnProperty.call(UriUtils.prototype, name) || Array.prototype.indexOf.call(['fragment'], name) !== -1)
 		{
 			continue;
 		}
