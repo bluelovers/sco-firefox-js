@@ -178,7 +178,7 @@ this.exports.module = module;
 this.exports.require = require;
 this.exports.Loader = Loader;
 
-let {UriUtils} = module('Utils/Uri.js?2222ff66ff22222');
+let {UriUtils} = module('utils/uri.js?2222ff66ff22222');
 
 Object.assign(Loader.prototype,
 {
