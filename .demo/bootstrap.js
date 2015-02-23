@@ -6,7 +6,7 @@ const Cu = Components.utils;
 
 (function(){
 
-	var {Bootstrap} = module('Bootstrap.js');
+	var {Bootstrap} = module('bootstrap.js');
 
 	function module(uri, base)
 	{
