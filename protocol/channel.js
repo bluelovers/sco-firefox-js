@@ -129,7 +129,7 @@ Object.assign(ProtocolChannel.prototype,
 		var mm = Cc["@mozilla.org/childprocessmessagemanager;1"]
 			.getService(Ci.nsISyncMessageSender);
 		var response = mm.sendSyncMessage(
-			'greasemonkey:scripts-for-uuid',
+			this.options.schemeName + ':scripts-for-uuid',
 			{
 				'uuid': match[1]
 			});
